@@ -1,19 +1,38 @@
 import React from "react";
+import { useState } from "react";
+import Input from "./Input";
 
 interface PlayerProps {
-    name: string;
+    initialName: string;
     symbol: string;
 }
 
-export default function Player({ name, symbol}: PlayerProps): JSX.Element {
+export default function Player({ initialName, symbol}: PlayerProps): JSX.Element {
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [playerName, setPlayerName] = useState<string>(initialName);
+
+    function handleClick(): void {
+        setIsEditing((prev) => !prev);
+    }
+
+    function handleNameChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        setPlayerName(event.target.value);
+    }
     
     return (
         <li>
             <span className="player">
-                <span className="player-name">{name}</span>
+                {isEditing &&
+                    <Input
+                        playerName={playerName}
+                        onChange={handleNameChange} />
+                }
+                {!isEditing &&
+                    <span className="player-name">{playerName}</span>
+                }
                 <span className="player-symbol">{symbol}</span>
             </span>
-            <button>Edit</button>
+            <button onClick={handleClick}>{isEditing ? 'Save' : 'Edit'}</button>
         </li>
     )
-}
+} 
