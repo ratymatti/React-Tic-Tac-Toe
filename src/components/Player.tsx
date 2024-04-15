@@ -5,9 +5,10 @@ import Input from "./Input";
 interface PlayerProps {
     initialName: string;
     symbol: string;
+    isActive: boolean;
 }
 
-export default function Player({ initialName, symbol}: PlayerProps): JSX.Element {
+export default function Player({ initialName, symbol, isActive }: PlayerProps): JSX.Element {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [playerName, setPlayerName] = useState<string>(initialName);
 
@@ -20,7 +21,7 @@ export default function Player({ initialName, symbol}: PlayerProps): JSX.Element
     }
     
     return (
-        <li>
+        <li className={isActive ? "active" : undefined}>
             <span className="player">
                 {isEditing &&
                     <Input
