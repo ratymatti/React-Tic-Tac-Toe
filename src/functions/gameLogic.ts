@@ -1,4 +1,3 @@
-import { initialGameBoard } from "../App";
 import {
     GameTurn,
     GameBoardType,
