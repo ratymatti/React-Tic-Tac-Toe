@@ -10,6 +10,7 @@ import { functions } from "./functions/gameLogic"
 import {
     GameBoardType,
     GameState,
+    PlayerNames,
     PlayerSymbol
 } from "../src/types/types"
 
@@ -27,17 +28,18 @@ const initialGameState: GameState = {
     winner: null,
     gameBoard: JSON.parse(JSON.stringify(initialGameBoard)),
     currentPlayer: PlayerSymbol.X,
-    gamePoints: { xPoints: 0, oPoints: 0 },
-    playerNames: {
-        [PlayerSymbol.X]: "Player 1",
-        [PlayerSymbol.O]: "Player 2",
-        [PlayerSymbol.TIE]: "Tie"
-    }
+    gamePoints: { xPoints: 0, oPoints: 0 }
+};
+
+const initialPlayers = {
+    [PlayerSymbol.X]: "Player 1",
+    [PlayerSymbol.O]: "Player 2"
 };
 
 
 function App() {
     const [gameState, setGameState] = useState<GameState>(JSON.parse(JSON.stringify(initialGameState)));
+    const [players, setPlayers] = useState<PlayerNames>(initialPlayers);
 
     function handleSelectSquare(rowIndex: number, colIndex: number) {
         setGameState((prevState) => {
@@ -63,13 +65,10 @@ function App() {
     }
 
     function handlePlayerNameChange(player: PlayerSymbol, newName: string) {
-        setGameState((prevState) => {
+        setPlayers((prevNames) => {
             return {
-                ...prevState,
-                playerNames: {
-                    ...prevState.playerNames,
-                    [player]: newName
-                }
+                ...prevNames,
+                [player]: newName
             }
         });
     }
@@ -79,20 +78,21 @@ function App() {
             <div id="game-container">
                 <ol id="players" className="highlight-player">
                     <Player
-                        initialName="Player 1"
+                        initialName={players[PlayerSymbol.X]}
                         symbol={PlayerSymbol.X}
                         isActive={gameState.currentPlayer === PlayerSymbol.X}
                         handlePlayerNameChange={handlePlayerNameChange} />
                     <Player
-                        initialName="Player 2"
+                        initialName={players[PlayerSymbol.O]}
                         symbol={PlayerSymbol.O}
                         isActive={gameState.currentPlayer === PlayerSymbol.O}
                         handlePlayerNameChange={handlePlayerNameChange} />
                 </ol>
-                {gameState.winner && <GameOver
-                    winner={gameState.winner}
-                    playerNames={gameState.playerNames}
-                    handleRestart={handleRestart} />}
+                {gameState.winner &&
+                    <GameOver
+                        winner={gameState.winner}
+                        players={players}
+                        handleRestart={handleRestart} />}
                 <GameBoard
                     onSelectSquare={handleSelectSquare}
                     board={gameState.gameBoard} />
