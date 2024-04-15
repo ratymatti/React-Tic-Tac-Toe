@@ -1,5 +1,5 @@
 import React from "react";
-import { PlayerSymbol } from "../App";
+import { PlayerSymbol } from "../types/types";
 
 interface GameOverProps {
     winner: PlayerSymbol;
@@ -13,7 +13,7 @@ export default function GameOver({ winner, handleRestart }: GameOverProps) {
             <p>{winner} won!</p>
             <p>
                 <button onClick={handleRestart}>Rematch!</button>
-            </p>    
+            </p>
         </div>
     )
 }

@@ -1,26 +1,19 @@
-import React, { useEffect } from "react"
-import { useState } from "react"
+import React, { useState } from "react"
+
 import Player from "./components/Player"
 import GameBoard from "./components/GameBoard"
 import Log from "./components/Log"
-import  { PointCount, functions } from "./functions/gameLogic"
 import GameOver from "./components/GameOver"
 
-export interface GameTurn {
-    player: PlayerSymbol;
-    square: {
-        row: number;
-        col: number;
-    }
-}
+import { functions } from "./functions/gameLogic"
 
-export enum PlayerSymbol {
-    X = 'X',
-    O = 'O',
-    TIE = 'TIE'
-}
+import {
+    GameBoardType,
+    GameState,
+    PlayerSymbol
+} from "../src/types/types"
 
-export type GameBoardType = (PlayerSymbol | null)[][];
+
 
 export const initialGameBoard: GameBoardType = [
     [null, null, null, null],
@@ -29,7 +22,7 @@ export const initialGameBoard: GameBoardType = [
     [null, null, null, null]
 ];
 
-const initialGameState = {
+const initialGameState: GameState = {
     gameTurns: [],
     winner: null,
     gameBoard: JSON.parse(JSON.stringify(initialGameBoard)),
@@ -37,13 +30,6 @@ const initialGameState = {
     gamePoints: { xPoints: 0, oPoints: 0 }
 };
 
-export interface GameState {
-    gameTurns: GameTurn[];
-    winner: PlayerSymbol | null;
-    gameBoard: GameBoardType;
-    currentPlayer: PlayerSymbol;
-    gamePoints: PointCount;
-}
 
 function App() {
     const [gameState, setGameState] = useState<GameState>(JSON.parse(JSON.stringify(initialGameState)));
@@ -55,7 +41,7 @@ function App() {
             const newBoard = functions.updateBoard(prevState, rowIndex, colIndex);
             const updatedPoints = functions.updatePoints(prevState, updatedTurns);
             const isWinner = functions.determineWinner(updatedPoints, updatedTurns);
-    
+
             return {
                 ...prevState,
                 currentPlayer: newCurrentPlayer,

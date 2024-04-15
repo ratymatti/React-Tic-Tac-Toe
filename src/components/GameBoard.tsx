@@ -1,12 +1,12 @@
 import React from "react";
-import { GameBoardType } from "../App";
+import { GameBoardType } from "../types/types";
 
 interface GameBoardProps {
     board: GameBoardType;
     onSelectSquare: (rowIndex: number, colIndex: number) => void;
 }
 
-export default function GameBoard({ onSelectSquare, board }:GameBoardProps): JSX.Element {
+export default function GameBoard({ onSelectSquare, board }: GameBoardProps): JSX.Element {
 
     if (!board) return <h2>Loading...</h2>
 
@@ -20,7 +20,7 @@ export default function GameBoard({ onSelectSquare, board }:GameBoardProps): JSX
                                 <button
                                     onClick={() => onSelectSquare(rowIndex, colIndex)}
                                     disabled={playerSymbol !== null}>
-                                        {playerSymbol}
+                                    {playerSymbol}
                                 </button>
                             </li>
                         ))}

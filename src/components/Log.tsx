@@ -1,5 +1,5 @@
 import React from "react"
-import { GameTurn } from "../App"
+import { GameTurn } from "../types/types"
 
 interface LogProps {
     turns: GameTurn[]

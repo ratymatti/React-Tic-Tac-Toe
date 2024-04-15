@@ -19,7 +19,7 @@ export default function Player({ initialName, symbol, isActive }: PlayerProps): 
     function handleNameChange(event: React.ChangeEvent<HTMLInputElement>): void {
         setPlayerName(event.target.value);
     }
-    
+
     return (
         <li className={isActive ? "active" : undefined}>
             <span className="player">

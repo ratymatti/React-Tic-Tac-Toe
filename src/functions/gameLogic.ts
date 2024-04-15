@@ -1,15 +1,13 @@
-import { GameState, GameTurn } from "../App";
-import { PlayerSymbol, GameBoardType, initialGameBoard } from "../App";
+import { initialGameBoard } from "../App";
+import {
+    GameTurn,
+    GameBoardType,
+    PlayerSymbol,
+    GameState,
+    Board,
+    PointCount
+} from "../types/types";
 
-enum Board {
-    SIZE = 4,
-    POINT = 3
-}
-
-export interface PointCount {
-    xPoints: number;
-    oPoints: number;
-}
 
 function generateIndices(): number[][][] {
     const indices = [
@@ -45,7 +43,7 @@ function getPoints(turns: GameTurn[]): PointCount {
     return { xPoints: result.xPoints, oPoints: result.oPoints };
 }
 
-function countPoints(board: GameBoardType, indices: number [][][]): PointCount {
+function countPoints(board: GameBoardType, indices: number[][][]): PointCount {
     let xPoints = 0;
     let oPoints = 0;
 
