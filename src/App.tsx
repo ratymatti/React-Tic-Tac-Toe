@@ -54,7 +54,7 @@ function App() {
             const updatedTurns = functions.updateTurns(prevState, rowIndex, colIndex);
             const newBoard = functions.updateBoard(prevState, rowIndex, colIndex);
             const updatedPoints = functions.updatePoints(prevState, updatedTurns);
-            const winner = functions.determineWinner(updatedPoints, updatedTurns);
+            const isWinner = functions.determineWinner(updatedPoints, updatedTurns);
     
             return {
                 ...prevState,
@@ -62,8 +62,8 @@ function App() {
                 gameTurns: updatedTurns,
                 gameBoard: newBoard,
                 gamePoints: updatedPoints,
-                winner: winner
-            };
+                winner: isWinner
+            }
         });
     }
 
