@@ -18,6 +18,13 @@ export interface GameState {
     gameBoard: GameBoardType;
     currentPlayer: PlayerSymbol;
     gamePoints: PointCount;
+    playerNames: PlayerNames
+}
+
+export interface PlayerNames {
+    [PlayerSymbol.X]: string;
+    [PlayerSymbol.O]: string;
+    [PlayerSymbol.TIE]: string;
 }
 
 export interface PointCount {

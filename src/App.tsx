@@ -27,7 +27,12 @@ const initialGameState: GameState = {
     winner: null,
     gameBoard: JSON.parse(JSON.stringify(initialGameBoard)),
     currentPlayer: PlayerSymbol.X,
-    gamePoints: { xPoints: 0, oPoints: 0 }
+    gamePoints: { xPoints: 0, oPoints: 0 },
+    playerNames: {
+        [PlayerSymbol.X]: "Player 1",
+        [PlayerSymbol.O]: "Player 2",
+        [PlayerSymbol.TIE]: "Tie"
+    }
 };
 
 
@@ -57,21 +62,36 @@ function App() {
         setGameState(JSON.parse(JSON.stringify(initialGameState)));
     }
 
+    function handlePlayerNameChange(player: PlayerSymbol, newName: string) {
+        setGameState((prevState) => {
+            return {
+                ...prevState,
+                playerNames: {
+                    ...prevState.playerNames,
+                    [player]: newName
+                }
+            }
+        });
+    }
+
     return (
         <main>
             <div id="game-container">
                 <ol id="players" className="highlight-player">
                     <Player
                         initialName="Player 1"
-                        symbol="X"
-                        isActive={gameState.currentPlayer === PlayerSymbol.X} />
+                        symbol={PlayerSymbol.X}
+                        isActive={gameState.currentPlayer === PlayerSymbol.X}
+                        handlePlayerNameChange={handlePlayerNameChange} />
                     <Player
                         initialName="Player 2"
-                        symbol="O"
-                        isActive={gameState.currentPlayer === PlayerSymbol.O} />
+                        symbol={PlayerSymbol.O}
+                        isActive={gameState.currentPlayer === PlayerSymbol.O}
+                        handlePlayerNameChange={handlePlayerNameChange} />
                 </ol>
                 {gameState.winner && <GameOver
                     winner={gameState.winner}
+                    playerNames={gameState.playerNames}
                     handleRestart={handleRestart} />}
                 <GameBoard
                     onSelectSquare={handleSelectSquare}
