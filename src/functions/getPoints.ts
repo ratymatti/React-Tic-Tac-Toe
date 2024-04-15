@@ -12,8 +12,24 @@ interface PointCount {
     oPoints: number;
 }
 
+function generateIndices(): number[][][] {
+    const indices = [
+        // Rows
+        ...Array.from({ length: Board.SIZE }, (_, i) => Array.from({ length: Board.SIZE }, (_, j) => [i, j])),
+        // Columns
+        ...Array.from({ length: Board.SIZE }, (_, i) => Array.from({ length: Board.SIZE }, (_, j) => [j, i])),
+        // Diagonals (THESE MUST BE HARDCODED AGAIN IF BOARD SIZE CHANGES)
+        [[0, 3], [1, 2], [2, 1], [3, 0]],
+        [[0, 2], [1, 1], [2, 0]],
+        [[1, 3], [2, 2], [3, 1]],
+        [[0, 1], [1, 2], [2, 3]],
+        [[1, 0], [2, 1], [3, 2]],
+        [[0, 0], [1, 1], [2, 2], [3, 3]]
+    ];
+    return indices;
+}
 
-export default function countPoints(turns: GameTurn[]): PointCount {
+export default function getPoints(turns: GameTurn[]): PointCount {
     let gameBoard: GameBoardType = initialGameBoard;
 
     for (const turn of turns) {
@@ -23,29 +39,15 @@ export default function countPoints(turns: GameTurn[]): PointCount {
         gameBoard[row][col] = player;
     }
 
-    const result = iterateIndices(gameBoard);
-    console.log(result);
+    const indices = generateIndices();
+    const result = countPoints(gameBoard, indices);
 
     return { xPoints: result.xPoints, oPoints: result.oPoints };
 }
 
-function iterateIndices(board: GameBoardType): PointCount {
+function countPoints(board: GameBoardType, indices: number [][][]): PointCount {
     let xPoints = 0;
     let oPoints = 0;
-
-    const indices = [
-        // Rows
-        ...Array.from({ length: Board.SIZE }, (_, i) => Array.from({ length: Board.SIZE }, (_, j) => [i, j])),
-        // Columns
-        ...Array.from({ length: Board.SIZE }, (_, i) => Array.from({ length: Board.SIZE }, (_, j) => [j, i])),
-        // Diagonals
-        [[0, 3], [1, 2], [2, 1], [3, 0]],
-        [[0, 2], [1, 1], [2, 0]],
-        [[1, 3], [2, 2], [3, 1]],
-        [[0, 1], [1, 2], [2, 3]],
-        [[1, 0], [2, 1], [3, 2]],
-        [[0, 0], [1, 1], [2, 2], [3, 3]]
-    ];
 
     for (let i = 0; i < indices.length; i++) {
         let count = 0;
@@ -81,5 +83,5 @@ function iterateIndices(board: GameBoardType): PointCount {
         }
     }
 
-    return { xPoints: xPoints, oPoints: oPoints };
+    return { xPoints, oPoints };
 }
