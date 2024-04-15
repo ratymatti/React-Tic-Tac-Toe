@@ -1,13 +1,12 @@
-import { GameTurn } from "../App";
-import { PlayerSymbol } from "../App";
-import { GameBoardType, initialGameBoard } from "../components/GameBoard";
+import { GameState, GameTurn } from "../App";
+import { PlayerSymbol, GameBoardType, initialGameBoard } from "../App";
 
 enum Board {
     SIZE = 4,
     POINT = 3
 }
 
-interface PointCount {
+export interface PointCount {
     xPoints: number;
     oPoints: number;
 }
@@ -29,7 +28,7 @@ function generateIndices(): number[][][] {
     return indices;
 }
 
-export default function getPoints(turns: GameTurn[]): PointCount {
+function getPoints(turns: GameTurn[]): PointCount {
     let gameBoard: GameBoardType = initialGameBoard;
 
     for (const turn of turns) {
@@ -41,6 +40,7 @@ export default function getPoints(turns: GameTurn[]): PointCount {
 
     const indices = generateIndices();
     const result = countPoints(gameBoard, indices);
+    console.log(result)
 
     return { xPoints: result.xPoints, oPoints: result.oPoints };
 }
@@ -85,3 +85,38 @@ function countPoints(board: GameBoardType, indices: number [][][]): PointCount {
 
     return { xPoints, oPoints };
 }
+
+function updateTurns(prevState: GameState, rowIndex: number, colIndex: number): GameTurn[] {
+    return [
+        { square: { row: rowIndex, col: colIndex }, player: prevState.currentPlayer },
+        ...prevState.gameTurns
+    ];
+}
+
+function updateBoard(prevState: GameState, rowIndex: number, colIndex: number): GameBoardType {
+    const newBoard = prevState.gameBoard.map(row => [...row]);
+    newBoard[rowIndex][colIndex] = prevState.currentPlayer;
+    return newBoard;
+}
+
+function updatePoints(prevState: GameState, updatedTurns: GameTurn[]): any {
+    let newPoints = {};
+    if (updatedTurns.length >= 5) newPoints = getPoints(updatedTurns);
+    return {
+        ...prevState.gamePoints,
+        ...newPoints
+    };
+}
+
+function determineWinner(updatedPoints: any, updatedTurns: GameTurn[]): PlayerSymbol | null {
+    if (updatedPoints.xPoints === 1) {
+        return PlayerSymbol.X;
+    } else if (updatedPoints.oPoints === 3) {
+        return PlayerSymbol.O;
+    } else if (updatedTurns.length >= 16) {
+        return PlayerSymbol.TIE;
+    }
+    return null;
+}
+
+export const functions = { updateTurns, updateBoard, updatePoints, determineWinner };
