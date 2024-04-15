@@ -6,6 +6,9 @@ interface LogProps {
 }
 
 export default function Log({ turns }: LogProps): JSX.Element {
+
+    if (!turns) return <p>Loading...</p>
+
     return (
         <ol id="log">
             {turns.map(turn => {
