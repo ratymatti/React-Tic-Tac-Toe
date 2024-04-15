@@ -15,7 +15,7 @@ import {
 
 
 
-export const initialGameBoard: GameBoardType = [
+const initialGameBoard: GameBoardType = [
     [null, null, null, null],
     [null, null, null, null],
     [null, null, null, null],
