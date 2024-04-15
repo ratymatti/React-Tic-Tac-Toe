@@ -47,39 +47,37 @@ function iterateIndices(board: GameBoardType): PointCount {
         [[0, 0], [1, 1], [2, 2], [3, 3]]
     ];
 
-
     for (let i = 0; i < indices.length; i++) {
-        let xCount = 0;
-        let oCount = 0;
-        let lastSymbol: PlayerSymbol | null = null;
+        let count = 0;
+        let currentPlayer: PlayerSymbol | null = null;
 
         for (const indice of indices[i]) {
             const [row, col] = indice;
             const currentSymbol = board[row][col];
 
-            if (currentSymbol === PlayerSymbol.X) {
-                if (lastSymbol === PlayerSymbol.X) {
-                    xCount++;
-                } else {
-                    xCount = 1;
-                }
-            } else if (currentSymbol === PlayerSymbol.O) {
-                if (lastSymbol === PlayerSymbol.O) {
-                    oCount++;
-                } else {
-                    oCount = 1;
-                }
+            switch (currentSymbol) {
+                case PlayerSymbol.X:
+                case PlayerSymbol.O:
+                    if (currentPlayer === currentSymbol) {
+                        count++;
+                    } else {
+                        count = 1;
+                        currentPlayer = currentSymbol;
+                    }
+                    break;
+                default:
+                    count = 0;
+                    currentPlayer = null;
             }
 
-            if (xCount >= Board.POINT) {
-                xPoints++;
-                break;
-            } else if (oCount >= Board.POINT) {
-                oPoints++;
+            if (count >= Board.POINT) {
+                if (currentPlayer === PlayerSymbol.X) {
+                    xPoints++;
+                } else {
+                    oPoints++;
+                }
                 break;
             }
-
-            lastSymbol = currentSymbol;
         }
     }
 
