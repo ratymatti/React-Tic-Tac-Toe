@@ -1,34 +1,18 @@
 import React from "react";
-import { GameTurn, PlayerSymbol } from "../App";
+import { GameBoardType } from "../App";
 
 interface GameBoardProps {
-    turns: GameTurn[];
+    board: GameBoardType;
     onSelectSquare: (rowIndex: number, colIndex: number) => void;
 }
 
-export type GameBoardType = (PlayerSymbol | null)[][];
+export default function GameBoard({ onSelectSquare, board }:GameBoardProps): JSX.Element {
 
-export const initialGameBoard: GameBoardType = [
-    [null, null, null, null],
-    [null, null, null, null],
-    [null, null, null, null],
-    [null, null, null, null]
-];
-
-export default function GameBoard({ onSelectSquare, turns }:GameBoardProps): JSX.Element {
-    let gameBoard: GameBoardType = initialGameBoard;
-
-    for (const turn of turns) {
-        const { player, square } = turn;
-        const { row, col } = square;
-
-        gameBoard[row][col] = player;
-    }
-
+    if (!board) return <h2>Loading...</h2>
 
     return (
         <ol id="game-board">
-            {gameBoard.map((row, rowIndex) => (
+            {board.map((row, rowIndex) => (
                 <li key={rowIndex} >
                     <ol>
                         {row.map((playerSymbol, colIndex) => (
