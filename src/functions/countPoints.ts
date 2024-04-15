@@ -24,6 +24,7 @@ export default function countPoints(turns: GameTurn[]): PointCount {
     }
 
     const result = iterateIndices(gameBoard);
+    console.log(result);
 
     return { xPoints: result.xPoints, oPoints: result.oPoints };
 }
@@ -46,23 +47,39 @@ function iterateIndices(board: GameBoardType): PointCount {
         [[0, 0], [1, 1], [2, 2], [3, 3]]
     ];
 
+
     for (let i = 0; i < indices.length; i++) {
         let xCount = 0;
         let oCount = 0;
+        let lastSymbol: PlayerSymbol | null = null;
 
         for (const indice of indices[i]) {
             const [row, col] = indice;
-            if (board[row][col] === PlayerSymbol.X) {
-                xCount++;
-            } else if (board[row][col] === PlayerSymbol.O) {
-                oCount++;
-            }
-        }
+            const currentSymbol = board[row][col];
 
-        if (xCount >= Board.POINT) {
-            xPoints++;
-        } else if (oCount >= Board.POINT) {
-            oPoints++;
+            if (currentSymbol === PlayerSymbol.X) {
+                if (lastSymbol === PlayerSymbol.X) {
+                    xCount++;
+                } else {
+                    xCount = 1;
+                }
+            } else if (currentSymbol === PlayerSymbol.O) {
+                if (lastSymbol === PlayerSymbol.O) {
+                    oCount++;
+                } else {
+                    oCount = 1;
+                }
+            }
+
+            if (xCount >= Board.POINT) {
+                xPoints++;
+                break;
+            } else if (oCount >= Board.POINT) {
+                oPoints++;
+                break;
+            }
+
+            lastSymbol = currentSymbol;
         }
     }
 
