@@ -39,7 +39,7 @@ function App() {
             const newCurrentPlayer = prevState.currentPlayer === PlayerSymbol.X ? PlayerSymbol.O : PlayerSymbol.X;
             const updatedTurns = functions.updateTurns(prevState, rowIndex, colIndex);
             const newBoard = functions.updateBoard(prevState, rowIndex, colIndex);
-            const updatedPoints = functions.updatePoints(prevState, updatedTurns);
+            const updatedPoints = functions.updatePoints(prevState, newBoard, updatedTurns);
             const isWinner = functions.determineWinner(updatedPoints, updatedTurns);
 
             return {

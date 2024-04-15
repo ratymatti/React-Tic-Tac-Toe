@@ -26,20 +26,11 @@ function generateIndices(): number[][][] {
     return indices;
 }
 
-function getPoints(turns: GameTurn[]): PointCount {
-    let gameBoard: GameBoardType = initialGameBoard;
-
-    for (const turn of turns) {
-        const { player, square } = turn;
-        const { row, col } = square;
-
-        gameBoard[row][col] = player;
-    }
-
+function getPoints(board: GameBoardType): PointCount {
     const indices = generateIndices();
-    const result = countPoints(gameBoard, indices);
-    console.log(result)
 
+    const result = countPoints(board, indices);
+    
     return { xPoints: result.xPoints, oPoints: result.oPoints };
 }
 
@@ -97,9 +88,9 @@ function updateBoard(prevState: GameState, rowIndex: number, colIndex: number): 
     return newBoard;
 }
 
-function updatePoints(prevState: GameState, updatedTurns: GameTurn[]): any {
+function updatePoints(prevState: GameState, updateBoard: GameBoardType, updatedTurns: GameTurn[]): any {
     let newPoints = {};
-    if (updatedTurns.length >= 5) newPoints = getPoints(updatedTurns);
+    if (updatedTurns.length >= 5) newPoints = getPoints(updateBoard);
     return {
         ...prevState.gamePoints,
         ...newPoints
@@ -107,7 +98,7 @@ function updatePoints(prevState: GameState, updatedTurns: GameTurn[]): any {
 }
 
 function determineWinner(updatedPoints: any, updatedTurns: GameTurn[]): PlayerSymbol | null {
-    if (updatedPoints.xPoints === 1) {
+    if (updatedPoints.xPoints === 3) {
         return PlayerSymbol.X;
     } else if (updatedPoints.oPoints === 3) {
         return PlayerSymbol.O;
