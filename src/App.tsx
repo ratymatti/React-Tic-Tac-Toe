@@ -5,8 +5,6 @@ import GameBoard from "./components/GameBoard"
 import Log from "./components/Log"
 import GameOver from "./components/GameOver"
 
-import { functions } from "./functions/gameLogic"
-
 import {
     GameBoardType,
     GameState,
@@ -14,7 +12,14 @@ import {
     PlayerSymbol
 } from "../src/types/types"
 
+import { functions } from "./functions/gameLogic"
 
+const {
+    updateTurns,
+    updateBoard,
+    updatePoints,
+    determineWinner
+} = functions;
 
 const initialGameBoard: GameBoardType = [
     [null, null, null, null],
@@ -44,10 +49,10 @@ function App() {
     function handleSelectSquare(rowIndex: number, colIndex: number) {
         setGameState((prevState) => {
             const newCurrentPlayer = prevState.currentPlayer === PlayerSymbol.X ? PlayerSymbol.O : PlayerSymbol.X;
-            const updatedTurns = functions.updateTurns(prevState, rowIndex, colIndex);
-            const newBoard = functions.updateBoard(prevState, rowIndex, colIndex);
-            const updatedPoints = functions.updatePoints(prevState, newBoard, updatedTurns);
-            const isWinner = functions.determineWinner(updatedPoints, updatedTurns);
+            const updatedTurns = updateTurns(prevState, rowIndex, colIndex);
+            const newBoard = updateBoard(prevState, rowIndex, colIndex);
+            const updatedPoints = updatePoints(prevState, newBoard, updatedTurns);
+            const isWinner = determineWinner(updatedPoints, updatedTurns);
 
             return {
                 ...prevState,
